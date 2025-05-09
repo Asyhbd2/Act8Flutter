@@ -1,25 +1,33 @@
-import 'package:day6_fitness/Dashboard.dart';
 import 'package:flutter/material.dart';
+import 'package:day6_fitness/Dashboard.dart';
 import 'package:page_transition/page_transition.dart';
 
-void main() => runApp(
-  MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: HomePage(),
-  )
-);
+void main() => runApp(const MyApp());
+
+/// Ahora tenemos un MyApp que envuelve tu HomePage
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'La Cereza',
+      debugShowCheckedModeBanner: false,
+      home: const HomePage(),
+    );
+  }
+}
 
 class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   PageController? _pageController;
-
   AnimationController? rippleController;
   AnimationController? scaleController;
-
   Animation<double>? rippleAnimation;
   Animation<double>? scaleAnimation;
 
@@ -27,41 +35,48 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   void initState() {
     super.initState();
 
-    _pageController = PageController(
-      initialPage: 0
-    );
+    _pageController = PageController(initialPage: 0);
 
     rippleController = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 1)
+      duration: const Duration(seconds: 1),
     );
 
     scaleController = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 1)
+      duration: const Duration(seconds: 1),
     )..addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        Navigator.push(context, PageTransition(type: PageTransitionType.fade, child: Dashboard()));
-      }
-    });
+        if (status == AnimationStatus.completed) {
+          Navigator.push(
+            context,
+            PageTransition(
+                type: PageTransitionType.fade, child: const Dashboard()),
+          );
+        }
+      });
 
-    rippleAnimation = Tween<double>(
-      begin: 80.0,
-      end: 90.0
-    ).animate(rippleController!)..addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        rippleController?.reverse();
-      } else if(status == AnimationStatus.dismissed) {
-        rippleController?.forward();
-      }
-    });
+    rippleAnimation =
+        Tween<double>(begin: 80.0, end: 90.0).animate(rippleController!)
+          ..addStatusListener((status) {
+            if (status == AnimationStatus.completed) {
+              rippleController?.reverse();
+            } else if (status == AnimationStatus.dismissed) {
+              rippleController?.forward();
+            }
+          });
 
-    scaleAnimation = Tween<double>(
-      begin: 1.0,
-      end: 30.0
-    ).animate(scaleController!);
+    scaleAnimation =
+        Tween<double>(begin: 1.0, end: 30.0).animate(scaleController!);
 
     rippleController?.forward();
+  }
+
+  @override
+  void dispose() {
+    _pageController?.dispose();
+    rippleController?.dispose();
+    scaleController?.dispose();
+    super.dispose();
   }
 
   @override
@@ -70,100 +85,99 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       body: PageView(
         controller: _pageController,
         children: <Widget>[
-          makePage(image: 'assets/images/two.jpg'),
-          makePage(image: 'assets/images/one.jpg'),
-          makePage(image: 'assets/images/three.jpg'),
+          makePage(image: 'assets/images/Fondo2.png'),
         ],
       ),
     );
   }
 
-  Widget makePage({image}) {
-    return Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage(image),
-          fit: BoxFit.cover
-        )
-      ),
+  Widget makePage({required String image}) {
+    return SingleChildScrollView(
+      // Esto permite scroll vertical si el contenido es más alto que la pantalla
+      physics: const BouncingScrollPhysics(),
       child: Container(
+        height: MediaQuery.of(context).size.height,
+        // Ocupamos al menos la altura de la pantalla
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topRight,
-            end: Alignment.bottomRight,
-            colors: [
-              Colors.black.withOpacity(.3),
-              Colors.black.withOpacity(.2),
-            ]
-          )
+          image: DecorationImage(image: AssetImage(image), fit: BoxFit.cover),
         ),
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 40, horizontal: 30),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: 60,),
-                  Text('Good day\nhealth body', style: TextStyle(color: Color.fromARGB(255, 200, 224, 229), fontSize: 45, fontWeight: FontWeight.w900),),
-                  SizedBox(height: 20,),
-                  Text('With this app you can try different activities\nand choose what is more enjoyable for you.', style: TextStyle(color: Color.fromARGB(255, 185, 202, 206), fontSize: 18, height: 1.4, fontWeight: FontWeight.w300),),
-                  SizedBox(height: 40,),
-                ],
-              ),
-              // Column(
-              //   crossAxisAlignment: CrossAxisAlignment.start,
-              //   children: <Widget>[
-              //     FadeAnimation(1, Text("15", style: TextStyle(color: Colors.yellow[400], fontSize: 40, fontWeight: FontWeight.bold),)),
-              //     FadeAnimation(1.2, Text("Minutes", style: TextStyle(color: Colors.white, fontSize: 30),)),
-              //   ],
-              // ),
-              // SizedBox(height: 30,),
-              // Column(
-              //   crossAxisAlignment: CrossAxisAlignment.start,
-              //   children: <Widget>[
-              //     FadeAnimation(1, Text("3", style: TextStyle(color: Colors.yellow[400], fontSize: 40, fontWeight: FontWeight.bold),)),
-              //     FadeAnimation(1.2, Text("Exercises", style: TextStyle(color: Colors.white, fontSize: 30),)),
-              //   ],
-              // ),
-              // SizedBox(height: 180,),
-              // FadeAnimation(1, Align(
-              //   child: Text("Start the morning with your health", 
-              //   textAlign: TextAlign.center,
-              //   style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.w100),),
-              // )),
-              // SizedBox(height: 30,),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: AnimatedBuilder(
-                  animation: rippleAnimation!,
-                  builder: (context, child) => Container(
-                    width: rippleAnimation?.value,
-                    height: rippleAnimation?.value,
-                    child: Container(
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topRight,
+              end: Alignment.bottomRight,
+              colors: [
+                Colors.black.withOpacity(.3),
+                Colors.black.withOpacity(.2),
+              ],
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 30),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
+              // Ocupamos todo el espacio vertical disponible
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                // Cabecera de texto
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: const [
+                    SizedBox(height: 60),
+                    Text(
+                      'Bienvenido\nA la Cereza',
+                      style: TextStyle(
+                          color: Color(0xff3ff800),
+                          fontSize: 45,
+                          fontWeight: FontWeight.w900,
+                          fontFamily: 'CarterOne'),
+                    ),
+                    SizedBox(height: 20),
+                    Text(
+                      '¡Con la siguiente app estaras en una aplicacion para comprar postres y decoracion!',
+                      style: TextStyle(
+                        color: Color(0xff3ff800),
+                        fontSize: 18,
+                        height: 1.4,
+                        fontWeight: FontWeight.w300,
+                        fontFamily: 'CarterOne',
+                      ),
+                    ),
+                    SizedBox(height: 40),
+                  ],
+                ),
+
+                // Botón de fingerprint con animaciones
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: AnimatedBuilder(
+                    animation: rippleAnimation!,
+                    builder: (context, child) => Container(
+                      width: rippleAnimation!.value,
+                      height: rippleAnimation!.value,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Colors.white.withOpacity(.4)
+                        color: Colors.white.withOpacity(.4),
                       ),
                       child: InkWell(
-                        onTap: () {
-                          scaleController?.forward();
-                        },
+                        onTap: () => scaleController?.forward(),
                         child: AnimatedBuilder(
                           animation: scaleAnimation!,
                           builder: (context, child) => Transform.scale(
-                            scale: scaleAnimation?.value,
+                            scale: scaleAnimation!.value,
                             child: Container(
-                              margin: EdgeInsets.all(10),
-                              decoration: BoxDecoration(
+                              margin: const EdgeInsets.all(10),
+                              decoration: const BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: Colors.white
+                                color: Color(0xff3ff800),
                               ),
-                              child: scaleController?.status == AnimationStatus.forward || scaleController?.status == AnimationStatus.completed ? null : Center(
-                                child: Icon(Icons.fingerprint, size: 40,)
-                              ),
+                              child: scaleController!.status ==
+                                          AnimationStatus.forward ||
+                                      scaleController!.status ==
+                                          AnimationStatus.completed
+                                  ? null
+                                  : const Center(),
                             ),
                           ),
                         ),
@@ -171,11 +185,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     ),
                   ),
                 ),
-              )
-            ],
+              ],
+            ),
           ),
         ),
-      )
+      ),
     );
   }
 }

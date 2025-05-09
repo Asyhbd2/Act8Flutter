@@ -1,201 +1,196 @@
 import 'package:flutter/material.dart';
+import 'package:day6_fitness/main.dart'; // Importa HomePage
 
-class Dashboard extends StatefulWidget {
-  @override
-  State<Dashboard> createState() => _DashboardState();
-}
-
-class _DashboardState extends State<Dashboard> {
-  final List<String> _repeat = [
-    'All type',
-    'Chest',
-    'Cardio',
-    'Lower'
-  ];
-
-  int _selectedRepeat = 0;
+class Dashboard extends StatelessWidget {
+  const Dashboard({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xAA151919),
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        centerTitle: false,
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("Mohammad", style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),),
-            Text("VIP Member", style: TextStyle(color: Colors.grey[500], fontSize: 14),),
-          ],
+        automaticallyImplyLeading: false,
+        backgroundColor: const Color(0xFFC91441),
+        toolbarHeight: 95,
+        leadingWidth: 95,
+        leading: IconButton(
+          padding: EdgeInsets.zero,
+          iconSize: 75,
+          icon: Image.asset('assets/icons/Logo.png', fit: BoxFit.contain),
+          onPressed: () {
+            // Volver a HomePage con animación y fondo personalizado
+            Navigator.of(context).pushReplacement(
+              PageRouteBuilder(
+                transitionDuration: const Duration(milliseconds: 600),
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    const HomePage(),
+                transitionsBuilder:
+                    (context, animation, secondaryAnimation, child) {
+                  const backgroundColor = Color(0xFFC91441);
+                  return Stack(
+                    children: [
+                      FadeTransition(
+                        opacity: animation,
+                        child: Container(color: backgroundColor),
+                      ),
+                      FadeTransition(
+                        opacity: animation,
+                        child: child,
+                      ),
+                    ],
+                  );
+                },
+              ),
+            );
+          },
         ),
-        leading: Padding(
-            padding: const EdgeInsets.only(left: 16.0, top: 8, bottom: 8),
-            child: CircleAvatar(
-              backgroundImage: ExactAssetImage('assets/images/two.jpg'),
-            ),
-          ),
-        actions: <Widget>[
+        title: const SizedBox(),
+        actions: [
           Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Icon(Icons.menu, color: Colors.white, size: 30,),
-          )
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Image.asset('assets/icons/Carrito.png', height: 40),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Image.asset('assets/icons/Menu.png', height: 40),
+          ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: SafeArea(
-          child: Padding(
-            padding: EdgeInsets.all(20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(height: 10,),
-                Container(
-                  padding: EdgeInsets.all(24),
-                  decoration: BoxDecoration(
-                    color: Color(0xAA282D2D),
-                    borderRadius: BorderRadius.circular(10)
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Color(0xAA151919),
-                          shape: BoxShape.circle
-                        ),
-                        width: 60,
-                        height: 60,
-                        child: Center(
-                          child: Icon(Icons.directions_run_sharp, color: Colors.white, size: 28,),
+      body: SafeArea(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    // Banner superior
+                    Container(
+                      color: const Color(0xFF55091C),
+                      height: 55,
+                      alignment: Alignment.center,
+                      child: const Text(
+                        '¿No tienes cuenta? ¡Registrate!',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 23,
+                          fontFamily: 'CarterOne',
                         ),
                       ),
-                      // SizedBox(width: 16,),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                    ),
+                    // Imagen de promoción
+                    Image.asset('assets/images/Promocion.png',
+                        fit: BoxFit.cover),
+                    // Banner "Lo más vendido"
+                    Container(
+                      color: const Color(0xFF55091C),
+                      height: 55,
+                      alignment: Alignment.center,
+                      child: const Text(
+                        '¡Lo más vendido!',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 23,
+                          fontFamily: 'CarterOne',
+                        ),
+                      ),
+                    ),
+                    // Menú con fondo y items
+                    Container(
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage('assets/images/Bas.png'),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 24),
+                      child: Column(
                         children: [
-                          Text("Summer Challenge", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Color(0xFF5D6262)),),
-                          SizedBox(height: 5,),
-                          Text("5km marathon", style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500, color: Colors.white),)
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: const [
+                              MenuItem(
+                                imagePath: 'assets/images/Cheesecake.png',
+                                label: 'Cheese Cake',
+                              ),
+                              MenuItem(
+                                imagePath: 'assets/images/Perro.png',
+                                label: 'Perro Pastel',
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 24),
+                          const _WhiteBar(),
                         ],
                       ),
-                      SizedBox(width: 16,),
-                      Container(
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          color: Color(0xAA373C3C),
-                          borderRadius: BorderRadius.circular(5)
-                        ),
-                        child: Icon(Icons.keyboard_double_arrow_right_outlined, size: 28, color: Color(0xFFD0DCDE),))
-                    ],
-                  ),
-                ),
-                SizedBox(height: 16,),
-                Divider(color: Color(0xFF181D1E), thickness: 2, indent: 10,endIndent: 10,),
-                SizedBox(height: 24,),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("Workout Program", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Color(0xFFD0DCDE)),),
-                    Text("See All", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Color(0xFFD0DCDE)),),
+                    ),
                   ],
                 ),
-                SizedBox(height: 24,),
-                Container(
-                  height: 45,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: _repeat.length,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _selectedRepeat = index;
-                          });
-                        },
-                        child: Container(
-                          padding: EdgeInsets.symmetric(horizontal: 20),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(50),
-                            color: _selectedRepeat == index ? Color(0xAA282D2D) : Colors.transparent,
-                          ),
-                          margin: EdgeInsets.only(right: 20),
-                          child: Center(child: Text(_repeat[index], 
-                            style: TextStyle(fontSize: 18, color: _selectedRepeat == index ? Colors.white : Color(0xFF5D6262), fontWeight: FontWeight.w500),)
-                          ),
-                        )
-                      );
-                    },
-                  )
-                ),
-                SizedBox(height: 24,),
-                Column(
-                  children: [
-                    makeItem(image: "assets/images/two.jpg", title: "Full Body\nExercise"),
-                    makeItem(image: "assets/images/three.jpg", title: "Chest Muscle\nExercise"),
-                    makeItem(image: "assets/images/one.jpg", title: "Full Body\nExercise"),
-                  ],
-                )
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         ),
       ),
     );
   }
+}
 
-Widget makeItem({image, title}) {
+class _WhiteBar extends StatelessWidget {
+  const _WhiteBar({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: 30),
-      height: 200,
-      width: double.infinity,
-      child: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(image),
-            fit: BoxFit.cover,
-          ),
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Container(
+      width: 150,
+      height: 4,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(2),
+      ),
+    );
+  }
+}
+
+class MenuItem extends StatelessWidget {
+  final String imagePath;
+  final String label;
+
+  const MenuItem({Key? key, required this.imagePath, required this.label})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          width: 139,
+          height: 139,
+          padding: const EdgeInsets.all(4),
           decoration: BoxDecoration(
+            color: Colors.pinkAccent,
             borderRadius: BorderRadius.circular(20),
-            gradient: LinearGradient(
-              begin: Alignment.centerLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                  Colors.black.withOpacity(0.6),
-                  Colors.black.withOpacity(0.6),
-                  Colors.black.withOpacity(0.4),
-                  Colors.black.withOpacity(.0),
-              ]
-            )
+            border: Border.all(color: Colors.white, width: 4),
           ),
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(title, style: TextStyle(color: Color.fromARGB(255, 200, 224, 229), fontSize: 32, fontWeight: FontWeight.w900),),
-                MaterialButton(
-                  onPressed: () {},
-                  color: Color(0xFFD7F2F3),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(50)
-                  ),
-                  child: Text("Start workout", style: TextStyle(fontWeight: FontWeight.w600),),
-                )
-              ],
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(16),
+            child: Center(
+              child: Image.asset(imagePath, fit: BoxFit.contain),
             ),
           ),
         ),
-      ),
+        const SizedBox(height: 8),
+        Text(
+          label,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+            fontFamily: 'CarterOne',
+          ),
+        ),
+      ],
     );
   }
 }
