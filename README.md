@@ -1,37 +1,9 @@
-## Flutter Page Transition Animation, Application Design - Day 6
+## Capturas:
 
-```dart
-class Afgprogrammer extends Flutter100DaysOfCode {
-  video() {
-    return {
-      "title": "Flutter Page Transition Animation, Application Design",
-      "description": "Let's see how PageTransition animation works in flutter.",
-      "day": 6,
-      "videoLink": "https://youtu.be/KEUKRT9Xsls"
-    }
-  }
-}
-```
+## Main:
 
-[Youtube Video](https://youtu.be/KEUKRT9Xsls)
-<br><br>
-## Previous Designs
-[Checkout my Youtube channel](https://youtube.com/afgprogrammer)
+![image](https://github.com/user-attachments/assets/da8c8324-a684-4d12-9822-4fa34fd4e771)
+## Index:
 
-## Development Setup
-Clone the repository and run the following commands:
-```
-flutter pub get
-flutter run
-```
-
-## ScreenShot
-
-<img src="assets/screenshot/one.png" height="500em" />&nbsp;<img src="assets/screenshot/two.png" height="500em" />
-
-## Links
-
-* [Website](https://afgprogrammer.com)
-* [Youtube channel](https://youtube.com/afgprogrammer)
-* [Twitter](https://twitter.com/afgprogrammer)
-* [Instagram](https://instagram.com/afgprogrammer)
+![image](https://github.com/user-attachments/assets/13ea32fc-54e0-40b9-8a23-6cfefff3c716)
+![image](https://github.com/user-attachments/assets/d25a7708-e764-4074-872c-0543e2a5e7f6)
